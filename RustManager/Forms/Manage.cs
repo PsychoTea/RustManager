@@ -95,7 +95,7 @@ namespace RustManager.Forms
             }
 
             NameBox.Text = model.Name;
-            AddressBox.Text = model.Address;
+            AddressBox.Text = model.IP;
             ServerPort.Value = model.Port;
             RCONPort.Value = model.RconPort;
             PasswordBox.Text = model.Password;

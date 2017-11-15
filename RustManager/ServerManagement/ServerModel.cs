@@ -3,7 +3,7 @@
     public class ServerModel
     {
         public string Name { get; set; } = "";
-        public string Address { get; set; } = "";
+        public string IP { get; set; } = "";
         public int Port { get; set; } = 0;
         public int RconPort { get; set; } = 0;
         public string Password { get; set; } = "";
@@ -15,7 +15,7 @@
         public ServerModel(string name, string ip, int port, int rconPort, string password, bool connectOnLoad, bool legacyServer)
         {
             Name = name;
-            Address = ip;
+            IP = ip;
             Port = port;
             RconPort = rconPort;
             Password = password;
