@@ -25,14 +25,14 @@ namespace RustManager.ServerManagement
             {
                 if (RconInstance == null)
                 {
-                    RconInstance = new SourceRconConnection(ServerInfo.Address, ServerInfo.RconPort, ServerInfo.Password, message => OnMessage(message));
+                    RconInstance = new SourceRconConnection(ServerInfo.IP, ServerInfo.RconPort, ServerInfo.Password, message => OnMessage(message));
                 }
 
                 RconInstance.Connect();
                 return;
             }
 
-            WebSocketInstance = new WebSocketConnection(ServerInfo.Address, ServerInfo.RconPort, ServerInfo.Password, message => OnMessage(message));
+            WebSocketInstance = new WebSocketConnection(ServerInfo.IP, ServerInfo.RconPort, ServerInfo.Password, message => OnMessage(message));
             WebSocketInstance.Connect();
         }
 
