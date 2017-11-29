@@ -44,7 +44,7 @@ namespace RustManager.Forms
                 return;
             }
 
-            if (string.IsNullOrEmpty(AddressBox.Text) || !IPAddress.TryParse(AddressBox.Text, out IPAddress ipAddress))
+            if (string.IsNullOrEmpty(AddressBox.Text))
             {
                 MessageBox.Show("You must enter a (valid) IP address.");
                 return;
@@ -56,9 +56,14 @@ namespace RustManager.Forms
                 return;
             }
             
-            var serverItem = new ServerModel(NameBox.Text, ipAddress.ToString(),
-                (int)ServerPort.Value, (int)RCONPort.Value, PasswordBox.Text, ConnectOnStartupCheck.Checked,
-                LegacyServer.Checked);
+            var serverItem = new ServerModel(NameBox.Text, 
+                                             AddressBox.Text,
+                                             (int)ServerPort.Value, 
+                                             (int)RCONPort.Value, 
+                                             PasswordBox.Text, 
+                                             ConnectOnStartupCheck.Checked,
+                                             LegacyServer.Checked);
+
             var search = DataFileManager.Data.AllServers.Where(x => x.Name == serverItem.Name);
 
             if (search.Any())
