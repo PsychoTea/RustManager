@@ -4,10 +4,10 @@ namespace RustManager
 {
     public static class Tools
     {
-        public static TabPage FindTabPage(TabControl control, string name)
+        public static TabPage FindTabControl(TabControl control, string name)
         {
             var index = control.TabPages.IndexOfKey(name);
-            return (index != -1) ? control.TabPages[index] : null;
+            return index != -1 ? control.TabPages[index] : null;
         }
     }
 }

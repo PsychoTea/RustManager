@@ -19,7 +19,7 @@ namespace RustManager.Forms
             InitializeComponent();
 
             Instance = this;
-            Tabs = TabPanel;
+            Tabs = TabControl;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -31,7 +31,7 @@ namespace RustManager.Forms
             RefreshServerList();
 
             var page = TabManager.Instance.DefaultPage;
-            TabPanel.TabPages.Add(page);
+            TabControl.TabPages.Add(page);
 
             ServerManager.ConnectToAll(true);
         }
@@ -68,9 +68,9 @@ namespace RustManager.Forms
 
         private void TabPanel_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedIndex = TabPanel.SelectedIndex;
+            var selectedIndex = TabControl.SelectedIndex;
             if (selectedIndex == -1) return;
-            var page = TabPanel.TabPages[selectedIndex];
+            var page = TabControl.TabPages[selectedIndex];
             var foundArray = page.Controls.Find("OutputBox", false);
 
             if (foundArray.Count() == 0) return;
@@ -88,13 +88,17 @@ namespace RustManager.Forms
 
         public void OutputText(string tabName, string text)
         {
-            var page = Tools.FindTabPage(TabPanel, tabName);
+            var page = Tools.FindTabControl(TabControl, tabName);
             if (page == null) return;
-            var foundArray = page.Controls.Find("OutputBox", false);
 
-            if (foundArray.Count() == 0) return;
+            var selectorControl = page.Controls.Find("SelectorControl", false).FirstOrDefault();
+            if (selectorControl == null) return;
 
-            var outputBox = foundArray[0] as TextBox;
+            var consolePage = selectorControl.Controls.Find("ConsolePage", false).FirstOrDefault();
+            if (consolePage == null) return;
+
+            var outputBox = consolePage.Controls.Find("OutputBox", false).FirstOrDefault() as TextBox;
+            if (outputBox == null) return;
 
             if (outputBox.InvokeRequired)
             {
@@ -114,32 +118,32 @@ namespace RustManager.Forms
 
         public void Disconnect(string tabName)
         {
-            var page = Tools.FindTabPage(TabPanel, tabName);
+            var page = Tools.FindTabControl(TabControl, tabName);
             if (page == null) return;
 
             var connection = ServerManager.FindConnection(page);
             if (connection == null) return;
 
             ServerManager.Disconnect(connection);
-            TabPanel.TabPages.Remove(page);
+            TabControl.TabPages.Remove(page);
 
-            if (TabPanel.TabPages.Count == 0)
+            if (TabControl.TabPages.Count == 0)
             {
                 var defaultPage = TabManager.Instance.DefaultPage;
-                TabPanel.TabPages.Add(defaultPage);
+                TabControl.TabPages.Add(defaultPage);
             }
         }
 
         public void Reconnect(string tabName)
         {
-            var page = Tools.FindTabPage(TabPanel, tabName);
+            var page = Tools.FindTabControl(TabControl, tabName);
             if (page == null) return;
 
             var connection = ServerManager.FindConnection(page);
             if (connection == null) return;
 
             ServerManager.Disconnect(connection);
-            TabPanel.TabPages.Remove(page);
+            TabControl.TabPages.Remove(page);
 
             var newInfo = DataFileManager.Data.AllServers.FirstOrDefault(x => x.Name == connection.ServerInfo.Name);
             if (newInfo == null) return;
@@ -157,18 +161,18 @@ namespace RustManager.Forms
         {
             if (e.Button != MouseButtons.Right && e.Button != MouseButtons.Middle) return;
 
-            for (int i = 0; i < TabPanel.TabPages.Count; i++)
+            for (int i = 0; i < TabControl.TabPages.Count; i++)
             {
-                if (TabPanel.GetTabRect(i).Contains(e.Location))
+                if (TabControl.GetTabRect(i).Contains(e.Location))
                 {
-                    var tab = TabPanel.TabPages[i];
+                    var tab = TabControl.TabPages[i];
 
                     if (e.Button == MouseButtons.Right)
                     {
                         tab.ContextMenu = new ContextMenu();
                         tab.ContextMenu.MenuItems.Add(new MenuItem("Disconnect", (s, evt) => Disconnect(tab.Name)));
                         tab.ContextMenu.MenuItems.Add(new MenuItem("Reconnect", (s, evt) => Reconnect(tab.Name)));
-                        tab.ContextMenu.Show(TabPanel, e.Location);
+                        tab.ContextMenu.Show(TabControl, e.Location);
                         return;
                     }
 

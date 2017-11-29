@@ -29,8 +29,8 @@ namespace RustManager.ServerManagement
             page.Name = model.Name;
             page.Text = model.Name;
 
-            tabManager.commandBox.KeyUp += connection.OnCommandBoxKey;
-            tabManager.sayBox.KeyUp += connection.OnChatBoxKey;
+            tabManager.CommandBox.KeyUp += connection.OnCommandBoxKey;
+            tabManager.SayBox.KeyUp += connection.OnChatBoxKey;
             MainForm.Instance.Tabs.TabPages.Add(page);
 
             ConnectedServers.Add(connection);
